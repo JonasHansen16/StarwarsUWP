@@ -22,12 +22,18 @@ namespace StarWarsUWP.App.Utility
 
         public bool CanExecute(object parameter)
         {
-            return _canExecute == null ? true : _canExecute(parameter);
+            bool b = _canExecute == null ? true : _canExecute(parameter);
+            return b;
         }
 
         public void Execute(object parameter)
         {
             _execute(parameter);
+        }
+        public void RaiseCanExecuteChanged()
+        {
+            if (CanExecuteChanged != null)
+                CanExecuteChanged(this, EventArgs.Empty);
         }
     }
 }

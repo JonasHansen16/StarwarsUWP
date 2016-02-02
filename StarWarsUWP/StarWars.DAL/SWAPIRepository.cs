@@ -33,6 +33,19 @@ namespace StarWars.DAL
             return movie;
         }
 
+        public async Task<SWPlanet> GetPlanet(string planet)
+        {
+            string swapifilms = planet;
+            var uri = new Uri(string.Format("{0}?format=json", swapifilms));
+            var client = new HttpClient();
+            var response = await Task.Run(() => client.GetAsync(uri));
+            response.EnsureSuccessStatusCode();
+            var result = await Task.Run(() => response.Content.ReadAsStringAsync());
+            var root = JsonConvert.DeserializeObject<SWPlanet>(result);
+            return root;
+
+        }
+
         class RootObject<T>
         {
             public int count { get; set; }

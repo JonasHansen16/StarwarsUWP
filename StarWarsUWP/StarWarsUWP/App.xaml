@@ -5,6 +5,7 @@
     xmlns:local="using:StarWarsUWP.App"
     xmlns:views="using:StarWarsUWP.App.Views"
     xmlns:converters="using:StarWarsUWP.App.Converters"
+    xmlns:rating="clr-namespace:BratchedTools.RatingControl"
     RequestedTheme="Light">
 
     <Application.Resources>

@@ -7,9 +7,10 @@ using StarWars.Domain;
 
 namespace StarWars.DAL
 {
-    interface IStarWarsRepository
+    public interface IStarWarsRepository
     {
         SWMovie GetMovieByUrl(string url);
         Task<List<SWMovie>> GetAllSWMovies();
+        Task<SWPlanet> GetPlanet(string planet);
     }
 }

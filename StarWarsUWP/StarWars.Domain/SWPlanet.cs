@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System.ComponentModel;
 
 namespace StarWars.Domain
 {
-    public class SWPlanet : SWResource
+    public class SWPlanet : SWResource, INotifyPropertyChanged
     {
         public SWPlanet()
         {
@@ -23,7 +24,7 @@ namespace StarWars.Domain
         public int OrbitalPeriod { get; set; }
         public int Diameter { get; set; }
         public string Climate { get; set; }
-        public string Gravigy { get; set; }
+        public string Gravity { get; set; }
         public string Terrain { get; set; }
 
         [JsonProperty("surface_water")]
@@ -36,5 +37,7 @@ namespace StarWars.Domain
 
         [JsonProperty(PropertyName = "films")]
         public List<string> FilmUris { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

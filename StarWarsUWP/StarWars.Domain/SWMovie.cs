@@ -26,7 +26,15 @@ namespace StarWars.Domain
         public string Director { get; set; }
         public string Producer { get; set; }
 
-        public int Rating { get; set; }
+        private double rating = 0;
+        public double Rating {
+            get { return rating; }
+            set
+            {
+                rating = value;
+                RaisePropertyChanged();
+            }
+        }
 
         [JsonProperty(PropertyName = "release_date")]
         public DateTime ReleaseDate { get; set; }

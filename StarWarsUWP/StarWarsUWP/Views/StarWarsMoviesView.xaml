@@ -7,29 +7,51 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:rating="using:Bratched.Tools.RatingControl"
+    DataContext="{Binding Source={StaticResource viewModelLocator}, Path=MainViewViewModel }"
     mc:Ignorable="d">
     <Grid>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
-                <VisualState>
+                <VisualState x:Name="Small">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="imgPoster.Width"
+                              Value="200"/>
+                        <Setter Target="imgPoster.Height"
+                              Value="300"/>
+                        <Setter Target="stpDetails.(RelativePanel.Below)"
+                                Value="imgPoster"/>
+                        <Setter Target="stpDetails.(RelativePanel.AlignLeftWith)"
+                                Value="txbTitle"/>
+                        <Setter Target="stpDetails.Margin"
+                                Value="0,0,0,0"/>
+                        <Setter Target="txbTitle.FontSize"
+                                Value="50"/>
+
+
+
+
+
+
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="Wide">
                     <VisualState.StateTriggers>
                         <AdaptiveTrigger MinWindowWidth="720" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="txbTitle.(RelativePanel.Below)"
-                        Value="" />
-                        <Setter Target="txbTitle.(RelativePanel.RightOf)"
-                        Value="lsvMovies" />
-                        <Setter Target="imgPoster.(RelativePanel.RightOf)"
-                        Value="lsvMovies" />
-                        <Setter Target="imgPoster.(RelativePanel.RightOf)"
-                        Value="lsvMovies" />
+
                         <Setter Target="stpDetails.(RelativePanel.RightOf)"
-                        Value="imgPoster" />
-                        <Setter Target="stpDetails.(RelativePanel.Below)"
-                        Value="txbTitle" />
-                        
-                        
+                               Value="imgPoster"/>
+                        <Setter Target="stpDetails.(RelativePanel.AlignTopWith)"
+                                Value="imgPoster"/>
+
+
+
+
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
@@ -38,53 +60,52 @@
 
         <ScrollViewer>
 
-            <RelativePanel x:Name="rlpMovieDetails" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" DataContext="{Binding Source={StaticResource viewModelLocator}, Path=MainViewViewModel }">
+            <RelativePanel x:Name="rlpMovieDetails" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 
 
                 <interactivity:Interaction.Behaviors>
                     <core:EventTriggerBehavior EventName="Loaded">
-                        <core:InvokeCommandAction Command="{Binding PageLoadedCommand}" CommandParameter="{Binding null}"/>
+                        <core:InvokeCommandAction Command="{Binding PageLoadedCommand}"/>
                     </core:EventTriggerBehavior>
                 </interactivity:Interaction.Behaviors>
 
-                <ListView x:Name="lsvMovies"  RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignTopWithPanel="True" ItemsSource="{Binding SWMovies}">
+                <ListView x:Name="lsvMovies"  RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignTopWithPanel="True" ItemsSource="{Binding SWMovies}" SelectedItem="{Binding SelectedSWMovie, Mode=TwoWay}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Episode_Id, Converter={StaticResource romanConverter}}"/>
                         </DataTemplate>
                     </ListView.ItemTemplate>
-                    <interactivity:Interaction.Behaviors>
-                        <core:EventTriggerBehavior EventName="SelectionChanged">
-                            <core:InvokeCommandAction Command="{Binding ShowDetailsCommand}" CommandParameter="{Binding ElementName=lsvMovies, Path=SelectedItem}" />
-                        </core:EventTriggerBehavior>
-                    </interactivity:Interaction.Behaviors>
+                   
+                  
                 </ListView>
-                <TextBlock x:Name="txbTitle" Text="{Binding SelectedSWMovie.Title, Mode=OneWay}" FontSize="25" RelativePanel.Below="lsvMovies" />
-                <Image x:Name="imgPoster" Height="600" Width="400" Source="{ Binding SelectedSWMovie.Title, Converter={StaticResource posterConverter }, Mode=OneWay}" RelativePanel.Below="txbTitle"/>
-                <StackPanel x:Name="stpDetails"  Orientation="Vertical" RelativePanel.Below="imgPoster" RelativePanel.AlignBottomWith="imgPoster">
-                    <StackPanel Margin="5, 0, 5, 5">
+                <TextBlock x:Name="txbTitle" Text="{Binding SelectedSWMovie.Title, Mode=OneWay}" FontSize="25"  RelativePanel.RightOf="lsvMovies" />
+                <Image x:Name="imgPoster" Height="600" Width="400" Source="{ Binding SelectedSWMovie.Title, Converter={StaticResource posterConverter }, Mode=OneWay}" RelativePanel.Below="txbTitle" RelativePanel.RightOf="lsvMovies" />
+                <RelativePanel x:Name="stpDetails"   HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="50,0,0,0"  >
+                    <StackPanel Name="release" Margin="5, 0, 5, 5">
                         <TextBlock Text="Release Date" FontSize="10"/>
                         <TextBlock Text="{Binding SelectedSWMovie.ReleaseDate, Converter={StaticResource dateConverter },Mode=OneWay}" />
                     </StackPanel>
-                    <StackPanel Margin="5, 0, 5, 5">
+                    <StackPanel Name="director" Margin="5, 0, 5, 5" RelativePanel.Below="release">
                         <TextBlock Text="Director" FontSize="10"/>
                         <TextBlock Text="{Binding SelectedSWMovie.Director, Mode=OneWay}" />
                     </StackPanel>
-                    <StackPanel Margin="5, 0, 5, 5">
+                    <StackPanel Name="producer" Margin="5, 0, 5, 5" RelativePanel.Below="director">
                         <TextBlock Text="Producer" FontSize="10"/>
                         <TextBlock Text="{Binding SelectedSWMovie.Producer, Mode=OneWay}" />
                     </StackPanel>
-                    <StackPanel Margin="5, 0, 5, 5">
+                    <StackPanel Name="rating" Margin="5, 0, 5, 5" RelativePanel.Below="producer">
                         <TextBlock Text="Rating" FontSize="10"/>
-                        <TextBlock Text="{Binding SelectedSWMovie.Rating, Mode=TwoWay}" />
+                        <rating:RatingControl ItemsCount="10" Value="{Binding SelectedSWMovie.Rating, Mode= TwoWay}"/>
                     </StackPanel>
-                    
-                </StackPanel>
-                <StackPanel Name="Buttons" Orientation="Horizontal" HorizontalAlignment="Center" >
-                    <Button Name="DownButton" Content="Down"></Button>
-                    <Button Name="UpButton" Content="Up"></Button>
+                    <StackPanel Name="Buttons" Orientation="Horizontal" RelativePanel.Below="rating" RelativePanel.AlignHorizontalCenterWithPanel="True" >
+                        <Button Name="DownButton" Content="Down" Command="{Binding RatingDownCommand}"></Button>
+                        <Button Name="UpButton" Content="Up" Margin="20,0,0,0" Command="{Binding RatingUpCommand}"></Button>
+                        <Button Name="NextPage" Content="ShowPlanets" Margin="20,0,0,0" Command="{Binding NavigateCommand}"></Button>
 
-                </StackPanel>
+                    </StackPanel>
+
+                </RelativePanel>
+            
 
             </RelativePanel>
         </ScrollViewer>
