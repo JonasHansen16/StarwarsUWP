@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MasterDetailPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StarWarsCross.Views.StarWarsMainView"
+             xmlns:local="clr-namespace:StarWarsCross;assembly=StarWarsCross"
+             BindingContext="{Binding Source={StaticResource ViewModelLocator}, Path=MainViewViewModel }">
+  <MasterDetailPage.Master>
+    <ContentPage Title="StarWarsCross">
+      <ListView x:name ="MoviesListView"
+                ItemsSource="{Binding SWMovies}"
+                SelectedItem="{Binding SelectedSWMovie, Mode=TwoWay}">
+        <ListView.ItemTemplate>
+          <DataTemplate>
+            <ViewCell>
+            <Label Text="{Binding Episode_Id, Converter={StaticResource romanConverter}}"/>
+            </ViewCell>
+          </DataTemplate>
+        </ListView.ItemTemplate>
+        
+      </ListView>
+    </ContentPage>
+  </MasterDetailPage.Master>
+  <MasterDetailPage.Detail>
+    <ContentPage>
+      <StackLayout>
+        <Label Text="{Binding SelectedSWMovie.Title"/>
+        <Image Source="{ Binding SelectedSWMovie.Title, Converter={StaticResource posterConverter }, Mode=OneWay}"/>
+        <Label Text="ReleaseDate"/>
+        <Label Text="{Binding=SelectedSWMovie.ReleaseDate, Converter={StaticResource dateConverter}, Mode=OneWay}"/>
+        <Label Text="Director"/>
+        <Label Text="{Binding SelectedSWMovie.Director, Mode=OneWay}" />
+        <Label Text="Produces"/>
+        <Label Text="{Binding SelectedSWMovie.Producer, Mode=OneWay}" />
+        <Label Text="Rating"/>
+        <Label Text="{Binding SelectedSWMovie.Rating"/>
+        <StackLayout Orientation="Horizontal">
+          <Button Text="Down" Command="{Binding RatingDownCommand}"></Button>
+          <Button Text="Up" Command="{Binding RatingDownCommand}"></Button>
+          <Button Text="ShowPlanets"  Command="{Binding NavigateCommand}"></Button>
+        </StackLayout>
+      </StackLayout>
+    </ContentPage>
+  </MasterDetailPage.Detail>
+</MasterDetailPage>
